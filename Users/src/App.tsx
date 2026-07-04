@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 import './App.css'
 import type { IUser } from './interfaces'
 
@@ -8,9 +8,13 @@ function App() {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    axios.get<IUser[]>('https://jsonplaceholder.typicode.com/users').then((response) => {
-      setUsers(response.data)
-    })
+    axios.get<IUser[]>('https://jsonplaceholder.typicode.com/users')
+      .then((response: AxiosResponse<IUser[]>) => {
+        setUsers(response.data)
+      })
+      .catch((error: unknown) => {
+        console.error('Failed to fetch users:', error)
+      })
   }, [])
 
   const filteredUsers = users.filter((user) => {
